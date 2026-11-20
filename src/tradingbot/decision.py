@@ -10,8 +10,10 @@ from decimal import ROUND_DOWN, Decimal, localcontext
 from typing import NamedTuple, cast
 
 from tradingbot.bounds import clamp_bounds
+from tradingbot.logfilter import install_secret_redaction
 from tradingbot.sizing import bootstrap_quantity, half_kelly_risk
 
+install_secret_redaction()
 _LOG = logging.getLogger("tradingbot.decision")
 _LOG.setLevel(logging.INFO)
 
