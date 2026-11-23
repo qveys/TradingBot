@@ -1,0 +1,8 @@
+services:
+  tradingbot:
+    build: .
+    init: true
+    env_file:
+      - ${TRADINGBOT_ENV_FILE:?indiquer le chemin absolu du fichier hors du dépôt}
+    ports:
+      - "127.0.0.1:8080:8080"
