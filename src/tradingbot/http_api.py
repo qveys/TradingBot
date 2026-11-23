@@ -15,19 +15,21 @@ def handle_intent(
     authorization: str | None,
     token: str,
     read_body: Callable[[], object],
-    rules: Callable[[], None],
+    rules: Callable[[], tuple[int, dict[str, str]] | None],
 ) -> tuple[int, dict[str, str]]:
     if not _token_ok(authorization, token):
         return 401, {"error": "unauthorized"}
     if not _intent_complete(read_body()):
         return 400, {"error": "incomplete_intent"}
-    rules()
+    refusal = rules()
+    if refusal is not None:
+        return refusal
     return 200, {"check": "pass"}
 
 
 def make_handler(
     token: str,
-    rules: Callable[[], None] | None = None,
+    rules: Callable[[], tuple[int, dict[str, str]] | None] | None = None,
 ) -> type[BaseHTTPRequestHandler]:
     check = rules if rules is not None else lambda: None
 
